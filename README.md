@@ -1,65 +1,67 @@
-# AI Governance and Institutional Intermediaries: Analyzing Congruence in Collective Intelligence
+# AI Governance and Institutional Intermediaries: Preliminary EDA on Global Dialogues GD3
 
-An empirical research project investigating the alignment between public AI governance preferences and national regulatory frameworks, with a specific focus on the role of institutional intermediaries (employers, educational institutions, healthcare providers, and local public-sector agencies).
+Preliminary exploratory analysis of the Global Dialogues GD3 dataset, supporting a larger research project on the alignment between public AI governance preferences and national regulatory frameworks, with particular attention to institutional intermediaries (employers, schools, healthcare providers, public-sector agencies).
 
----
+## Data
 
-## Project Overview
+Data comes from CIP's public [`collect-intel/global-dialogues`](https://github.com/collect-intel/global-dialogues) repository. This analysis uses GD3 (March 2025).
 
-Existing analyses of AI regulation tend to treat governance as a binary relationship between nation-states and AI developers, treating the public merely as an aggregated preference input. This framework overlooks the critical layer where AI governance is actually experienced by most people: institutional intermediaries that translate provider behavior and state regulations into daily workflows and interfaces.
+Files used:
+- `GD3_aggregate_standardized.csv`
+- `GD3_participants.csv`
+- `GD3_verbatim_map.csv`
 
-This project introduces an intermediary-aware model of "democratic congruence" to investigate two core dimensions:
-1. **Vertical Congruence:** Whether state-level regulatory outputs match public preferences across core dimensions (transparency, redress, deployment restrictions, public participation, and provider constraints).
-2. **Architectural Congruence:** Whether the distribution of governance authority delegated to intermediaries matches the institutional trust allocations actually held by the public.
+## Setup
 
----
+Python 3.10+. Install dependencies:
 
-## Research Questions
+```bash
+pip install pandas numpy jupyter
+```
 
-1. **Regulatory Alignment:** Where do public preferences, as expressed across Global Dialogues rounds, converge or diverge from existing regulatory architectures across a comparative set of jurisdictions (US, UK, EU, China, India, Brazil)?
-2. **The Architectural Choice:** Do publics in jurisdictions that delegate governance to intermediaries express trust commensurate with that delegated authority? Conversely, do centralized regimes reflect organic public demand for state intervention, or do they indicate institutional vulnerabilities?
-3. **The Intermediary Gap:** Where governance architectures and trust allocations diverge, what are the implications for institutional design? (e.g., Are states empowering intermediaries that the public deeply distrusts, or failing to empower intermediaries that the public trusts?)
+Run the notebook:
 
----
+```bash
+jupyter notebook global_dialogues_eda.ipynb
+```
 
-## Methodology and Analytical Stack
+## Analysis
 
-This work combines comparative legal coding, quantitative survey analysis, and computational text mining:
+The notebook (a) identifies questions and responses related to institutional trust and governance through keyword filtering, (b) extracts the structured trust battery covering eight institutional categories, (c) filters to a target jurisdiction set (US, UK, India, China, Brazil), and (d) scans open-ended responses for organic mentions of workplaces, schools, and healthcare institutions.
 
-* **Structured Regulatory Coding:** Constructing a comparative dataset of 8–12 national regulatory regimes (including the EU AI Act, US Executive Orders, China’s Generative AI Rules, and Brazil's PL 2338) evaluated against structural dimensions derived from Global Dialogues indicators. Iterative Inter-Rater Reliability (IRR) protocols discipline the schema.
-* **Quantitative Preference Analysis:** Multilevel modeling nesting individual respondents within countries, incorporating country-level covariates from the V-Dem Institute, OECD Trust Survey, and the Edelman Trust Barometer to isolate AI-specific dynamics from baseline institutional trust. 
-* **Computational Text Mining:** Embedding-based clustering paired with keyword-lexicon string filtering to identify and categorize how respondents organically invoke intermediary layers when reasoning about AI.
-* **Benchmarking and Representativeness:** Comparative analysis against the World Values Survey and regional Barometers, reporting diagnostics using the open-source Global Representativeness Index (GRI) framework (1 - TVD).
+## Preliminary findings
 
----
+### Structured trust battery
 
-## Initial EDA and Empirical Signals (Wave: GD3)
+GD3 contains eight purpose-built trust items measuring respondent trust in governments, large corporations, small businesses, social media companies, AI companies, public utility companies, public research institutions, and family doctors, each on a six-point ordinal scale (Strongly Distrust through Strongly Trust). The inclusion of AI companies as a distinct category, separable from large corporations and from public research institutions, supports decomposition of AI-specific distrust from baseline corporate or institutional distrust.
 
-An initial exploratory data analysis (EDA) conducted on the standardized GD3 (March 2025) dataset validated the empirical visibility of the intermediary layer within public reasoning:
+### Organic intermediary mentions in open-ended responses
 
-### 1. Organic Intermediary Mentions
-Parsing open-ended responses from the core target jurisdictions (US, UK, India, China, Brazil) surfaced significant, spontaneous discussion of downstream institutional mediation:
-* **Workplace / Employers (~6.1% of target respondents):** Participants frequently frame AI's societal impact entirely through its deployment by their employers (e.g., "Help me with my job").
-* **Education / Schools (~3.1% of target respondents):** Highlights critical institutional breakdown and friction points where schools fail to scaffold technology (e.g., students "blatantly using AI to finish assignments" resulting in "less intellectual growth").
-* **Healthcare (~1.7% of target respondents):** Professional and clinical instances of intermediaries utilizing generative tools to scale domain-specific content production.
+Across the 360 respondents from the five target jurisdictions in GD3, open-ended responses to "What has been the most noticeable change in your daily life, if any, as a result of AI in the past year?" mention:
 
-### 2. Available Target Sample Volume (N)
-The underlying participant distributions offer robust analytical leverage for cross-country modeling:
-* **India:** N = 183
-* **China:** N = 70
-* **United States:** N = 52
-* **Brazil:** N = 30
-* **United Kingdom:** N = 25
+- Workplaces or employers in 6.1% of responses (22 of 360)
+- Schools or education in 3.1% of responses (11 of 360)
+- Healthcare institutions in 1.7% of responses (6 of 360)
 
----
+Identification used keyword-lexicon filtering against eight workplace terms, seven education terms, and seven healthcare terms (see notebook for full lexicons). Sample responses are reproduced in the notebook output.
 
-## Deliverables and Target Audience
+### Sample volumes by target jurisdiction (GD3)
 
-* **Working Paper:** Full academic manuscript containing the multilevel model specifications, coding schema, and policy conclusions.
-* **Substack Series:** A 3-part translational writing series covering:
-  1. Headline empirical findings on state-level congruence.
-  2. Deep dive into specific jurisdictions where the intermediary layer drives the trust gap.
-  3. Actionable policy implications for institutional design.
-* **Interactive Visualization:** A comparative country-dashboard mapping state delegation vs. public trust allocations.
+| Country | N |
+|---|---|
+| India | 183 |
+| China | 70 |
+| United States | 52 |
+| Brazil | 30 |
+| United Kingdom | 25 |
 
-**Primary Audiences:** UK and US Artificial Intelligence Safety Institutes (AISIs), the International Network of AI Safety Institutes, the Independent AI Evaluators Forum, and the EU AI Office.
+## Limitations
+
+Keyword-lexicon filtering produces false positives (a response mentioning "company" in passing) and false negatives (a response describing an institutional context without naming it). Single-round single-jurisdiction sample sizes are small; pooling across GD rounds will be necessary for stable cross-country estimates. Categorizations are provisional pending validation against embedding-based clustering and a human-coded sample.
+
+## Next steps
+
+- Validate keyword filtering against embedding-based clustering and a human-coded sample.
+- Extend the analysis to GD4 through GD7.
+- Run ordinal multilevel models on the structured trust battery items, decomposing trust in AI companies relative to corporate and institutional baselines.
+- Integrate with comparative coding of national AI regulatory regimes.
